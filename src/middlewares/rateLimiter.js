@@ -1,9 +1,29 @@
 const rateLimit = require('express-rate-limit');
 
-const limiter = rateLimit({
-  windowMs: 24 * 60 * 60 * 1000, // 24 hours
-  max: parseInt(process.env.MAX_DAILY_UPLOADS) || 100,
-  message: 'Too many requests from this IP, please try again later.',
+const FILE_UPLOAD_LIMIT = process.env.UPLOAD_LIMIT; // Max uploads per windowMs per IP
+const FILE_DOWNLOAD_LIMIT = process.env.DOWNLOAD_LIMIT; // Max downloads per windowMs per IP
+
+
+// limit download request
+const downloadLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000, // 24 hours/ daily usage limiter for download 
+  max: FILE_DOWNLOAD_LIMIT,
+  message: "Too many download requests from this IP, please try again later.",
+  handler: (req, res) => {
+    console.log(`Rate limit exceeded for IP: ${req.ip}`);
+    res.status(429).send("Too many requests");
+  }
 });
 
-module.exports = limiter;
+// limit upload request
+const uploadLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000, // 24 hours/ daily usage limiter for upload
+  max: FILE_UPLOAD_LIMIT,
+  message: "Too many upload requests from this IP, please try again later.",
+  handler: (req, res) => {
+    console.log(`Rate limit exceeded for IP: ${req.ip}`);
+    res.status(429).send("Too many requests");
+  }
+});
+
+module.exports = { downloadLimiter, uploadLimiter };

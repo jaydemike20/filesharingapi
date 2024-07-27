@@ -1,0 +1,25 @@
+{
+  "name": "filesharing",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000f\u0000i\u0000l\u0000e\u0000s\u0000h\u0000a\u0000r\u0000i\u0000n\u0000g\u0000a\u0000p\u0000i\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "mime-types": "^2.1.35",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.1",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.1.4",
+    "uuid": "^10.0.0"
+  }
+}

@@ -4,8 +4,8 @@
   "description": "��#\u0000 \u0000f\u0000i\u0000l\u0000e\u0000s\u0000h\u0000a\u0000r\u0000i\u0000n\u0000g\u0000a\u0000p\u0000i\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -20,5 +20,9 @@
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.4",
     "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

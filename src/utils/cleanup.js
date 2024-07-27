@@ -3,31 +3,32 @@ const path = require('path');
 const cron = require('node-cron');
 
 const cleanupOldFiles = () => {
-  cron.schedule(`0 0 * * *`, () => {
-    // Run daily at midnight
-    const folderPath = process.env.FOLDER;
+  const folderPath = process.env.FOLDER;
+  const metadataFilePath = path.join(folderPath, 'metadata.json');
+  const cleanupPeriod = parseInt(process.env.CLEANUP_PERIOD_MINUTES) * 60 * 1000;
 
-    fs.readdir(folderPath, (err, files) => {
-      if (err) throw err;
+  // Schedule the cleanup task to run every minute
+  cron.schedule('* * * * *', () => {
+    console.log('Running cleanup task...');
+    if (fs.existsSync(metadataFilePath)) {
+      const metadataList = JSON.parse(fs.readFileSync(metadataFilePath, 'utf-8'));
+      const currentTime = Date.now();
 
-      files.forEach(file => {
-        const filePath = path.join(folderPath, file);
-        fs.stat(filePath, (err, stats) => {
-          if (err) throw err;
+      const updatedMetadataList = metadataList.filter(meta => {
+        const fileStats = fs.statSync(meta.filePath);
+        const lastModifiedTime = new Date(fileStats.mtime).getTime();
+        const inactiveTime = currentTime - lastModifiedTime;
 
-          const now = Date.now();
-          const fileAge = now - stats.mtimeMs;
-          const maxAge = parseInt(process.env.CLEANUP_INTERVAL) * 60 * 60 * 1000; // Convert to milliseconds
-
-          if (fileAge > maxAge) {
-            fs.unlink(filePath, (err) => {
-              if (err) throw err;
-              console.log(`Deleted ${filePath}`);
-            });
-          }
-        });
+        if (inactiveTime > cleanupPeriod) {
+          console.log(`Deleting file: ${meta.filePath}`);
+          fs.unlinkSync(meta.filePath);
+          return false;
+        }
+        return true;
       });
-    });
+
+      fs.writeFileSync(metadataFilePath, JSON.stringify(updatedMetadataList, null, 2));
+    }
   });
 };
 

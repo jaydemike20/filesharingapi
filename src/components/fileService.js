@@ -55,6 +55,35 @@ const deleteFileByPrivateKey = (privateKey) => {
   }
 };
 
+
+
+
+// Blockers - i don't have account for the storage providers
+//  no atm card :(
+// const { Storage } = require('@google-cloud/storage');
+// const gcs = new Storage(); // Initialize Google Cloud Storage
+
+// const bucketName = process.env.GCS_BUCKET_NAME;
+// const bucket = gcs.bucket(bucketName);
+
+// const storageProvider = {
+//   uploadFileToCloud: (file) => {
+//       const blob = bucket.file(file.filename);
+//       const blobStream = blob.createWriteStream();
+//       blobStream.on('error', (err) => {
+//           throw new Error('File upload failed');
+//       });
+//       blobStream.end(file.buffer);
+//       return { publicKey: uuidv4(), privateKey: uuidv4() };
+//   },
+
+//   getFileFromCloud: async (publicKey) => {
+//       // Implementation for getting file from GCS
+//   },
+
+//   deleteFileFromCloud: async (privateKey) => {
+//       // Implementation for deleting file from GCS
+//   }
+// };
+
 module.exports = { uploadFile, getFileByPublicKey, deleteFileByPrivateKey }
-
-

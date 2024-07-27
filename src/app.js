@@ -2,11 +2,17 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fileController = require('./controllers/fileController');
-const rateLimiter = require('./middlewares/rateLimiter');
 const { cleanupOldFiles } = require('./utils/cleanup');
 require('dotenv').config();
 
+const {downloadLimiter, uploadLimiter } = require('./middlewares/rateLimiter');
+
+
+
 const app = express();
+app.use(express.json({extended: true}))
+app.use(express.urlencoded({extended: true}))
+
 const port = process.env.PORT || 3000;
 
 // Set up storage for multer
@@ -21,17 +27,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Apply rate limiter middleware
-app.use(rateLimiter);
+
 
 // Routes
-app.post('/files', upload.single('file'), fileController.uploadFile);
-app.get('/files/:publicKey', fileController.downloadFileByPublicKey);
+app.post('/files', uploadLimiter, upload.single('file'), fileController.uploadFile);
+app.get('/files/:publicKey', downloadLimiter, fileController.downloadFileByPublicKey);
 app.delete('/files/:privateKey', fileController.deleteFileByPrivateKey);
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  cleanupOldFiles();
+
 });
 
-// Schedule file cleanup
-cleanupOldFiles();
+
+
+

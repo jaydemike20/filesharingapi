@@ -1,10 +1,8 @@
 const rateLimit = require('express-rate-limit');
 
-const FILE_UPLOAD_LIMIT = process.env.UPLOAD_LIMIT; // Max uploads per windowMs per IP
-const FILE_DOWNLOAD_LIMIT = process.env.DOWNLOAD_LIMIT; // Max downloads per windowMs per IP
+const FILE_UPLOAD_LIMIT = process.env.UPLOAD_LIMIT || 1; // Max uploads per windowMs per IP
+const FILE_DOWNLOAD_LIMIT = process.env.DOWNLOAD_LIMIT || 2; // Max downloads per windowMs per IP
 
-
-// limit download request
 const downloadLimiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000, // 24 hours/ daily usage limiter for download 
   max: FILE_DOWNLOAD_LIMIT,
@@ -15,7 +13,6 @@ const downloadLimiter = rateLimit({
   }
 });
 
-// limit upload request
 const uploadLimiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000, // 24 hours/ daily usage limiter for upload
   max: FILE_UPLOAD_LIMIT,

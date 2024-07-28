@@ -2,6 +2,8 @@ const express = require('express');
 const request = require('supertest');
 const { downloadLimiter, uploadLimiter } = require('../src/middlewares/rateLimiter'); // Adjust path if needed
 
+
+// test for daily usage limiter
 describe('Rate Limiter Middleware', () => {
   let app;
 

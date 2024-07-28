@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
@@ -7,6 +6,7 @@ const { cleanupOldFiles } = require('../src/utils/cleanup');
 jest.mock('fs');
 jest.mock('node-cron');
 
+// testing cleanup inactivty files
 describe('cleanupOldFiles', () => {
   const folderPath = '/mock/folder';
   const metadataFilePath = path.join(folderPath, 'metadata.json');

@@ -6,6 +6,7 @@ const { uploadFile, getFileByPublicKey, deleteFileByPrivateKey } = require('../s
 // Mock fs module
 jest.mock('fs');
 
+// test for components
 describe('fileService', () => {
     const mockFile = {
         filename: 'testfile.txt',

@@ -11,6 +11,7 @@ jest.mock('../src/components/fileService', () => ({
 
 const fileService = require('../src/components/fileService');
 
+// creating a test for controllers
 describe('fileController', () => {
     const req = {};
     const res = {

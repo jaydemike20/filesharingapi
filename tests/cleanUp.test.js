@@ -1,7 +1,8 @@
+
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
-const { cleanupOldFiles } = require('../src/utils/cleanup'); // Adjust path as needed
+const { cleanupOldFiles } = require('../src/utils/cleanup');
 
 jest.mock('fs');
 jest.mock('node-cron');
@@ -56,8 +57,8 @@ describe('cleanupOldFiles', () => {
     const scheduledFunction = cron.schedule.mock.calls[0][1];
     scheduledFunction();
 
-    expect(fs.unlinkSync).toHaveBeenCalledWith('file1.txt');
-    expect(fs.unlinkSync).toHaveBeenCalledWith('file2.txt');
+    expect(fs.unlinkSync).toHaveBeenCalledWith(path.join(folderPath, 'file1.txt'));
+    expect(fs.unlinkSync).toHaveBeenCalledWith(path.join(folderPath, 'file2.txt'));
     expect(fs.writeFileSync).toHaveBeenCalledWith(metadataFilePath, JSON.stringify([], null, 2));
   });
 

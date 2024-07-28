@@ -1,3 +1,4 @@
+// importing modules for filesystem, path and uuid library
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -22,9 +23,11 @@ const getFileMetaData = (filename) => {
 const uploadFile = (file) => {
     const metadata = getFileMetaData(file.filename);
     const metadataFilePath = path.join(process.env.FOLDER, 'metadata.json');
+    
     const metadataList = fs.existsSync(metadataFilePath)
     ? JSON.parse(fs.readFileSync(metadataFilePath, 'utf-8'))
     : [];
+
     metadataList.push(metadata);
     fs.writeFileSync(metadataFilePath, JSON.stringify(metadataList, null, 2));
     return metadata;
@@ -58,7 +61,7 @@ const deleteFileByPrivateKey = (privateKey) => {
 
 
 
-// Blockers - i don't have account for the storage providers
+// Blockers - i don't have account for the google cloud storage providers and other cloud storage as well
 //  no atm card :(
 // const { Storage } = require('@google-cloud/storage');
 // const gcs = new Storage(); // Initialize Google Cloud Storage

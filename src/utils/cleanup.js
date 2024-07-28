@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
@@ -15,13 +16,18 @@ const cleanupOldFiles = () => {
       const currentTime = Date.now();
 
       const updatedMetadataList = metadataList.filter(meta => {
-        const fileStats = fs.statSync(meta.filePath);
+        const filePath = path.join(folderPath, meta.filePath);
+        if (!fs.existsSync(filePath)) {
+          return false;
+        }
+
+        const fileStats = fs.statSync(filePath);
         const lastModifiedTime = new Date(fileStats.mtime).getTime();
         const inactiveTime = currentTime - lastModifiedTime;
 
         if (inactiveTime > cleanupPeriod) {
-          console.log(`Deleting file: ${meta.filePath}`);
-          fs.unlinkSync(meta.filePath);
+          console.log(`Deleting file: ${filePath}`);
+          fs.unlinkSync(filePath);
           return false;
         }
         return true;
